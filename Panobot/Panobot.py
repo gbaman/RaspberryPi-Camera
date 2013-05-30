@@ -1,4 +1,5 @@
-# By Andrew Mulholland aka gbaman
+#Panobot v0.2
+#By Andrew Mulholland aka gbaman
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
