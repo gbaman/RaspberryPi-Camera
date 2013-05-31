@@ -18,12 +18,14 @@
 # Rotate right - pin 13
 
 numrotate = 20 #Only used if no calibrater is run
-timeforrotate = 1.3 # How long the motors run each rotate
-numupdown = 5 # How many layers
+timeforrotate = 2.7 # How long the motors run each rotate
+numupdown = 3 # How many layers
+timeforupdown = 0.7 # How long the motors run each up or down
 
 from subprocess import call # Allows us to run normal bash commands
 import RPi.GPIO as GPIO
 import time
+GPIO.setwarnings(False)
 GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11,GPIO.OUT)
@@ -79,7 +81,7 @@ def directcontrol(): # A direct controller used to configure the robot
             print("Forward or back ?")
             dir = raw_input()
             for count in range(0,unit):
-                camUpDown(dir, 0.3)
+                camUpDown(dir, timeforupdown)
         elif control == "m":
             print("Rotate left or right ?")
             dir = raw_input()
@@ -113,7 +115,7 @@ def calibrater2(): # Subroutine that allows the user to configure how far they w
     return(totalrotate)
     
 def takepicture(num, level): # Subroutine to take the picture - Make sure there is a /home/pi/pano1 directory!!!
-    call(["raspistill", "-hf", "-t", "1000" ,"-o", "/home/pi/pano1/photo" + str(level) + "_" + str(num) + '.jpg'])
+    call(["raspistill", "-t", "1000" ,"-o", "/home/pi/pano1/photo" + str(level) + "_" + str(num) + '.jpg'])
 
 
 def controller(): # Main control subroutine. To do a dummy run, comment out takepicture(count1, count2) and uncomment out the time.sleeps
@@ -127,10 +129,10 @@ def controller(): # Main control subroutine. To do a dummy run, comment out take
         rotater("right", timeforrotate)
         for count2 in range(0,numupdown):
             takepicture(count1, count2)
-            camUpDown("forward", 0.3)
+            camUpDown("forward", timeforupdown)
             #time.sleep(0.5)
         for count3 in range(0,numupdown):
-            camUpDown("back", 0.30)
+            camUpDown("back", timeforupdown)
             time.sleep(0.2)
         #time.sleep(0.5)
 
